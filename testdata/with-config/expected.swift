@@ -1,0 +1,1 @@
+struct Example { let value: Int }
