@@ -1,0 +1,17 @@
+[package]
+name = "dprint-plugin-swift"
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+description = "dprint process plugin for formatting Swift using SwiftFormat"
+
+[[bin]]
+name = "dprint-plugin-swift"
+path = "src/main.rs"
+
+[dependencies]
+anyhow.workspace = true
+dprint-core.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+tokio.workspace = true
