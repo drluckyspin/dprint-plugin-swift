@@ -1,0 +1,101 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+    branches: [main]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  test:
+    name: Test (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-latest
+            target: aarch64-apple-darwin
+            platform: darwin-aarch64
+          - os: macos-15-intel
+            target: x86_64-apple-darwin
+            platform: darwin-x86_64
+          - os: ubuntu-22.04
+            target: x86_64-unknown-linux-gnu
+            platform: linux-x86_64
+          - os: ubuntu-24.04-arm
+            target: aarch64-unknown-linux-gnu
+            platform: linux-aarch64
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Rust cache
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: .
+
+      - name: Install dprint
+        run: curl -fsSL https://dprint.dev/install.sh | sh -s -- --yes
+
+      - name: Fetch SwiftFormat
+        run: make fetch-swiftformat
+
+      - name: Check, lint, test, fmt-check
+        run: |
+          export PATH="$HOME/.dprint/bin:$PATH"
+          make check
+          make lint
+          make test
+          make fmt-check
+
+      - name: Build release zip
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: make release-local
+
+      - name: Upload platform zip
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: actions/upload-artifact@v4
+        with:
+          name: dprint-plugin-swift-${{ matrix.target }}
+          path: build/dprint-plugin-swift-${{ matrix.target }}.zip
+
+  release:
+    name: Publish GitHub Release
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download all zips
+        uses: actions/download-artifact@v4
+        with:
+          path: build
+          pattern: dprint-plugin-swift-*
+          merge-multiple: true
+
+      - name: Generate plugin.json and latest.json
+        run: |
+          bash scripts/create-plugin-json.sh
+          cp metadata/schema.json schema.json
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            plugin.json
+            latest.json
+            schema.json
+            build/dprint-plugin-swift-aarch64-apple-darwin.zip
+            build/dprint-plugin-swift-x86_64-apple-darwin.zip
+            build/dprint-plugin-swift-x86_64-unknown-linux-gnu.zip
+            build/dprint-plugin-swift-aarch64-unknown-linux-gnu.zip
