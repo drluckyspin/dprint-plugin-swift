@@ -63,7 +63,9 @@ mkdir -p "$DEST_DIR"
 curl -fsSL "$URL" -o "$TMP_DIR/asset.zip"
 unzip -qo "$TMP_DIR/asset.zip" -d "$TMP_DIR/extract"
 
-FOUND="$(find "$TMP_DIR/extract" -type f \( -name swiftformat -o -name SwiftFormat \) | head -1)"
+FOUND="$(find "$TMP_DIR/extract" -type f \( \
+  -name swiftformat -o -name SwiftFormat -o -name 'swiftformat_linux*' \
+\) | head -1)"
 if [[ -z "$FOUND" ]]; then
   log_error "Could not find swiftformat binary in $ASSET"
   exit 1
