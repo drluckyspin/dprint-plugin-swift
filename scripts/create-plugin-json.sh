@@ -41,7 +41,7 @@ mkdir -p "$(dirname "$OUTPUT")"
   printf '  "schemaVersion": 2,\n'
   printf '  "kind": "process",\n'
   printf '  "name": "dprint-plugin-swift",\n'
-  printf '  "version": "%s"' "$VERSION"
+  printf '  "version": "%s",\n' "$VERSION"
 
   FIRST=true
   for PLATFORM in darwin-x86_64 darwin-aarch64 linux-x86_64 linux-aarch64; do
@@ -57,7 +57,7 @@ mkdir -p "$(dirname "$OUTPUT")"
     if [[ "$IS_TEST" == true ]]; then
       REF="file://$ZIP"
     else
-      REF="https://plugins.dprint.dev/drluckyspin/swiftformat/${VERSION}/asset/dprint-plugin-swift-${TARGET}.zip"
+      REF="https://github.com/drluckyspin/dprint-plugin-swift/releases/download/v${VERSION}/dprint-plugin-swift-${TARGET}.zip"
     fi
 
     if [[ "$FIRST" == true ]]; then
@@ -82,7 +82,7 @@ if [[ "$IS_TEST" == false ]]; then
   cat > "$ROOT/latest.json" << EOF
 {
   "schemaVersion": 1,
-  "url": "https://plugins.dprint.dev/drluckyspin/swiftformat-v${VERSION}.json",
+  "url": "https://github.com/drluckyspin/dprint-plugin-swift/releases/download/v${VERSION}/plugin.json",
   "version": "${VERSION}",
   "checksum": "${PLUGIN_CHECKSUM}"
 }
