@@ -54,8 +54,10 @@ DIM='\033[2m'
 # -----------------------------------------------------------------------------------------------------------
 get_terminal_width() {
     local width
-    width=$(tput cols)
-    if [ "$width" -gt 120 ]; then
+    width="$(tput cols 2>/dev/null || echo 80)"
+    if [[ -z "$width" || "$width" -le 0 ]]; then
+        width=80
+    elif [ "$width" -gt 120 ]; then
         width=120
     fi
     echo "$width"

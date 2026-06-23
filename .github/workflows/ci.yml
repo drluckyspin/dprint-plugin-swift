@@ -42,14 +42,19 @@ jobs:
           workspaces: .
 
       - name: Install dprint
-        run: curl -fsSL https://dprint.dev/install.sh | sh -s -- --yes
+        run: |
+          curl -fsSL https://dprint.dev/install.sh | sh -s 0.54.0
+          echo "$HOME/.dprint/bin" >> "$GITHUB_PATH"
 
       - name: Fetch SwiftFormat
+        env:
+          TERM: xterm-256color
         run: make fetch-swiftformat
 
       - name: Check, lint, test, fmt-check
+        env:
+          TERM: xterm-256color
         run: |
-          export PATH="$HOME/.dprint/bin:$PATH"
           make check
           make lint
           make test
