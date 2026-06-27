@@ -6,9 +6,32 @@ Supported platforms: **macOS** (Apple Silicon + Intel) and **Linux** (x86_64 + a
 
 Requires **dprint 0.40+** (process plugin schema v5).
 
-## Quick start (plugin)
+## Quick start
 
-Add to your `dprint.json`:
+Add the plugin with the [dprint](https://dprint.dev/) CLI:
+
+```bash
+dprint add drluckyspin/dprint-plugin-swift
+```
+
+This adds a versioned, checksummed entry under `plugins` in your `dprint.json`. Add a `swiftformat` section for options:
+
+```jsonc
+{
+  "swiftformat": {
+    "swiftVersion": "5.9"
+  },
+  "plugins": [
+    "https://plugins.dprint.dev/drluckyspin/swift-v0.1.0.json@faab1002bf499512dc2003198b844bf582cc6438d0dcab672be48478b5fcbafa"
+  ]
+}
+```
+
+Update to the latest release with `dprint config update`, or see [latest.json](https://plugins.dprint.dev/drluckyspin/dprint-plugin-swift/latest.json) for the current URL and checksum.
+
+### Manual install
+
+Alternatively, pin the plugin URL yourself:
 
 ```jsonc
 {
@@ -20,8 +43,6 @@ Add to your `dprint.json`:
   ]
 }
 ```
-
-For the latest plugin URL and checksum, see [latest.json](https://plugins.dprint.dev/drluckyspin/dprint-plugin-swift/latest.json).
 
 You can also keep a `.swiftformat` file in your project — the plugin passes `--stdinpath` so SwiftFormat discovers it automatically.
 
