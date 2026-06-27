@@ -4,6 +4,7 @@
 /vendor/swiftformat/**/swiftformat.exe
 *.zip
 plugin.json
+latest.json
 test-plugin.json
 .DS_Store
 node_modules/
