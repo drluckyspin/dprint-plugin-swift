@@ -16,10 +16,12 @@ Add to your `dprint.json`:
     "swiftVersion": "5.9"
   },
   "plugins": [
-    "https://plugins.dprint.dev/drluckyspin/swiftformat-v0.1.0.json@<checksum>"
+    "https://plugins.dprint.dev/drluckyspin/dprint-plugin-swift/v0.1.0/asset/plugin.json@faab1002bf499512dc2003198b844bf582cc6438d0dcab672be48478b5fcbafa"
   ]
 }
 ```
+
+For the latest plugin URL and checksum, see [latest.json](https://plugins.dprint.dev/drluckyspin/dprint-plugin-swift/latest.json).
 
 You can also keep a `.swiftformat` file in your project — the plugin passes `--stdinpath` so SwiftFormat discovers it automatically.
 
@@ -52,7 +54,7 @@ echo 'struct Example{let x:Int}' | swiftformat stdin --stdinpath /tmp/Example.sw
 
 ## Configuration
 
-See [metadata/schema.json](metadata/schema.json) for the full schema.
+See [metadata/schema.json](metadata/schema.json) or the [CDN schema](https://plugins.dprint.dev/drluckyspin/dprint-plugin-swift/v0.1.0/schema.json) for the full schema.
 
 | Property       | Description                               |
 | -------------- | ----------------------------------------- |
